@@ -1,0 +1,197 @@
+[index.html](https://github.com/user-attachments/files/25193594/index.html)
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Comidas Típicas do Rio de Janeiro</title>
+
+  <!-- Fonte Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .slider {
+      width: 90%;
+      max-width: 900px;
+      height: 500px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px;
+      opacity: 0;
+      transform: translateX(100%);
+      transition: all 0.8s ease;
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .slide h1 {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+      color: #38bdf8;
+    }
+
+    .slide p {
+      font-size: 1rem;
+      line-height: 1.6;
+      max-width: 700px;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      background: #38bdf8;
+      color: #000;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #0ea5e9;
+    }
+
+    .progress {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 5px;
+      background: #38bdf8;
+      width: 0;
+      transition: width 0.3s linear;
+    }
+  </style>
+</head>
+<body>
+
+<div class="slider">
+  <!-- Slide 1 -->
+  <div class="slide active">
+    <h1>🍽️ Comidas Típicas do Rio de Janeiro</h1>
+    <p>O Rio de Janeiro tem uma culinária muito rica, misturando influências indígenas, africanas e portuguesas. Nesta apresentação, você vai conhecer alguns pratos famosos do estado e suas histórias.</p>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slide">
+    <h1>🥘 Feijoada</h1>
+    <p><b>Do que é feita:</b> Feijão preto, carne de porco (costela, linguiça, pé, orelha), arroz, couve e farofa.<br><br>
+    <b>Origem e história:</b> A feijoada surgiu na época do Brasil colonial e foi muito popularizada pelos escravizados africanos, que aproveitavam partes menos nobres do porco. Hoje é considerada o prato mais famoso do Brasil.</p>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slide">
+    <h1>🍤 Bobó de Camarão</h1>
+    <p><b>Do que é feito:</b> Camarão, mandioca (aipim), leite de coco, azeite de dendê, cebola e alho.<br><br>
+    <b>Origem e história:</b> Esse prato veio da culinária africana e indígena. No Rio, ele ficou muito famoso nos restaurantes e nas praias, sendo um prato tradicional brasileiro.</p>
+  </div>
+
+  <!-- Slide 4 -->
+  <div class="slide">
+    <h1>🥟 Pastel com Caldo de Cana</h1>
+    <p><b>Do que é feito:</b> Massa frita recheada (carne, queijo, frango, etc.) e suco de cana-de-açúcar.<br><br>
+    <b>Origem e história:</b> O pastel é uma adaptação de receitas chinesas trazidas por imigrantes. No Rio, ele virou tradição nas feiras e praias, sempre acompanhado de caldo de cana.</p>
+  </div>
+
+  <!-- Slide 5 -->
+  <div class="slide">
+    <h1>🍖 Churrasco Carioca</h1>
+    <p><b>Do que é feito:</b> Carnes assadas na brasa, como picanha, frango, linguiça e costela, com farofa e vinagrete.<br><br>
+    <b>Origem e história:</b> O churrasco veio do sul do Brasil, mas no Rio virou parte da cultura de praia e festas em família, sendo muito consumido em finais de semana.</p>
+  </div>
+
+  <!-- Slide 6 -->
+  <div class="slide">
+    <h1>😋 Conclusão</h1>
+    <p>A comida do Rio de Janeiro representa a mistura de culturas do Brasil. Cada prato tem uma história e mostra como o povo brasileiro transformou ingredientes simples em comidas famosas no mundo inteiro.</p>
+  </div>
+
+  <div class="controls">
+    <button onclick="prevSlide()">⬅ Anterior</button>
+    <button onclick="nextSlide()">Próximo ➡</button>
+  </div>
+
+  <div class="progress" id="progress"></div>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let index = 0;
+  let timer;
+
+  function showSlide(i) {
+    slides.forEach(s => s.classList.remove('active'));
+    slides[i].classList.add('active');
+    updateProgress();
+  }
+
+  function nextSlide() {
+    index = (index + 1) % slides.length;
+    showSlide(index);
+    restartAuto();
+  }
+
+  function prevSlide() {
+    index = (index - 1 + slides.length) % slides.length;
+    showSlide(index);
+    restartAuto();
+  }
+
+  function updateProgress() {
+    const progress = document.getElementById('progress');
+    progress.style.width = ((index + 1) / slides.length) * 100 + '%';
+  }
+
+  function autoSlide() {
+    timer = setInterval(nextSlide, 5000); // troca a cada 5s
+  }
+
+  function restartAuto() {
+    clearInterval(timer);
+    autoSlide();
+  }
+
+  autoSlide();
+</script>
+
+</body>
+</html>
